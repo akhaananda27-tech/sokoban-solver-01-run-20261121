@@ -3,15 +3,15 @@ const{MAKEFUN_INPUT_DIR:I='/input',MAKEFUN_OUTPUT_DIR:O='/output'}=process.env
 const P=t=>{let w=t.indexOf('\n'),a=new Uint8Array(t.length).fill(1),g=[],b=[],p=-1,j=0
 for(let c of t){if(c=='\n')continue;if(c!='#'){a[j]=0;'.*+'.includes(c)&&g.push(j);'$*'.includes(c)&&b.push(j);'@+'.includes(c)&&(p=j)}j++}
 return{w,a,g,b,p,D:[-w,w,-1,1]}}
-const W=(l,o,f,t)=>{let{a,D}=l,s=new Uint8Array(a.length),r=''
-let F=x=>x==t||(s[x]=1,D.some((d,k)=>{let y=x+d;return!(a[y]|o[y])&&!s[y]&&F(y)?(r='udlr'[k]+r,1):0}))
+const W=(l,o,f,t)=>{let{a,D}=l,s=new Set,r=''
+let F=x=>x==t||(s.add(x),D.some((d,k)=>{let y=x+d;return!(a[y]|o[y])&&!s.has(y)&&F(y)?(r='udlr'[k]+r,1):0}))
 F(f);return r}
 const S=l=>{let{w,a,g,D}=l,s=a.length
 let o=new Uint8Array(s),e=new Int32Array(s),T=0
 let O=(b,v)=>b.forEach(x=>o[x]=v),K=x=>a[x]|o[x]
 let Z=b=>b.every(x=>g.includes(x))
 let q=[l.b,l.p,-1,0,0],m=new Set
-for(let x of l.b)o[x]=1
+O(l.b,1)
 m.add(l.b+','+l.p)
 let f=Z(l.b)?0:-1
 for(let h=0;f<0&&h<q.length;h+=5){let b=q[h]
@@ -45,7 +45,7 @@ for(let s=0;s<a.length;s++){if(a[s]||c[s]||t[s]>=0)continue
 let F=q=>{t[q]=R.length;for(let d of D){let y=q+d;!(a[y]|c[y])&&t[y]==null&&F(y)}};F(s)
 R.push([[],[]])}
 for(let x of b)R[t[x]][0].push(x)
-for(let x of g)if(t[x]>=0)R[t[x]][1].push(x)
+g.forEach(x=>t[x]>=0&&R[t[x]][1].push(x))
 if(g.some(x=>t[x]==null)||R.some(x=>x[0].length!=x[1].length))return null
 R=R.filter(x=>x[0].length)
 let u=0,v=''
